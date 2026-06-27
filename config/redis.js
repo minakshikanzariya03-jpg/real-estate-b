@@ -1,15 +1,19 @@
 const redis = require('redis');
 
-const redisClient = process.env.REDIS_URL
-    ? redis.createClient(process.env.REDIS_URL)
-    : redis.createClient(6379, '127.0.0.1');
+let redisClient = null;
 
-redisClient.on('connect', () => {
-    console.log('✅ Redis Connected');
-});
+if (process.env.REDIS_URL) {
+    redisClient = redis.createClient(process.env.REDIS_URL);
 
-redisClient.on('error', (err) => {
-    console.log('❌ Redis Error:', err);
-});
+    redisClient.on('connect', () => {
+        console.log('✅ Redis Connected');
+    });
+
+    redisClient.on('error', (err) => {
+        console.log('❌ Redis Error:', err);
+    });
+} else {
+    console.log('⚠️ REDIS_URL not found. Redis disabled.');
+}
 
 module.exports = redisClient;
