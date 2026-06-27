@@ -22,7 +22,7 @@ router.post('/addDepartment', jwt, async (req, res) => {
 
 });
 
-router.get('/departments', jwt, async (req, res) => {
+router.get('/departments', async (req, res) => {
 
     const cacheKey = 'departments';
 
