@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('../middleware/auth');
+const jwt = require('../middleware/jwtauth');
 const pool = require('../db');
 const redisClient = require('../config/redis');
 
@@ -22,7 +22,7 @@ router.post('/addDepartment', jwt, async (req, res) => {
 
 });
 
-router.get('/departments',jwt, async (req, res) => {
+router.get('/departments', jwt, async (req, res) => {
 
     const cacheKey = 'departments';
 

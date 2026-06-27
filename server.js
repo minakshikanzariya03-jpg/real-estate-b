@@ -10,6 +10,10 @@ const departmentRoutes = require('./route/department');
 
 app.use('/api', departmentRoutes);
 
-app.listen(3000, () => {
-    console.log('Server Running');
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running");
 });
+
+// app.listen(3000, () => {
+//     console.log('Server Running');
+// });
