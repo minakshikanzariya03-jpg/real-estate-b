@@ -6,10 +6,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Home route
 app.get('/', (req, res) => {
     res.json({
         success: true,
-        message: 'Backend is running 🚀'
+        message: 'Real Estate Backend is Running 🚀'
     });
 });
 
