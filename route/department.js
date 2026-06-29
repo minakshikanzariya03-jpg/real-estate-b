@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('../middleware/jwtauth');
 const pool = require('../db');
-const redisClient = require('../config/redis');
+// const redisClient = require('../config/redis');
 
 router.post('/addDepartment', jwt, async (req, res) => {
-    
+
     const { department_name, department_code } = req.body;
 
     await pool.query(
@@ -23,32 +23,24 @@ router.post('/addDepartment', jwt, async (req, res) => {
 });
 
 router.get('/departments', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT id, department_name, department_code
+      FROM department
+      ORDER BY department_name ASC
+    `);
 
-    const cacheKey = 'departments';
-
-    redisClient.get(cacheKey, async (err, cache) => {
-
-        if (cache) {
-            console.log('✅ Data From Redis');
-            return res.json(JSON.parse(cache));
-        }
-
-        console.log('🔥 Data From PostgreSQL');
-
-        const result = await pool.query(
-            'SELECT id, department_name, department_code FROM department'
-        );
-
-        redisClient.setex(
-            cacheKey,
-            60,
-            JSON.stringify(result.rows)
-        );
-
-        res.json(result.rows);
-
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching departments:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch departments',
+      error: error.message
     });
-
+  }
 });
+
+
 
 module.exports = router;
