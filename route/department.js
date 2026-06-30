@@ -4,7 +4,7 @@ const jwt = require('../middleware/jwtauth');
 const pool = require('../db');
 // const redisClient = require('../config/redis');
 
-router.post('/addDepartment', async (req, res) => {
+router.post('/addDepartment',jwt, async (req, res) => {
 
     const { department_name, department_code } = req.body;
 
@@ -22,7 +22,7 @@ router.post('/addDepartment', async (req, res) => {
 
 });
 
-router.get('/departments', async (req, res) => {
+router.get('/departments',jwt, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT id, department_name, department_code
